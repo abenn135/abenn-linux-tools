@@ -5,7 +5,8 @@ abenn_init () {
         . ./tmux_init.sh
     fi
     if [ -f ./aks_init.sh ]; then
-        . ./aks_init.sh
+        echo "yes"
+        #. ./aks_init.sh
     fi
     popd
     export GPG_TTY=$(tty)
