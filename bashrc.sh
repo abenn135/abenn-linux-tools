@@ -9,7 +9,7 @@ abenn_init () {
     fi
     popd
     export GPG_TTY=$(tty)
-    if [ -f /home/linuxbrew/.linuxbrew/bin ]; then
+    if [ -d /home/linuxbrew/.linuxbrew/bin ]; then
         export PATH=$PATH:/home/linuxbrew/.linuxbrew/bin
     fi
 }
