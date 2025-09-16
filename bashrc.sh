@@ -15,4 +15,14 @@ abenn_init () {
     fi
 }
 
+kubebuilder_completion () {
+    # kubebuilder autocompletion
+    if [ -f /usr/local/share/bash-completion/bash_completion ]; then
+        . /usr/local/share/bash-completion/bash_completion
+    else
+        . <(kubebuilder completion bash)
+    fi
+}
+
 abenn_init
+kubebuilder_completion
