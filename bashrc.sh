@@ -30,7 +30,6 @@ abenn_init () {
         export PATH=$PATH:/home/linuxbrew/.linuxbrew/bin
     fi
     alias k="kubectl"
-    falcon_init
 }
 
 kubebuilder_completion () {
@@ -43,4 +42,5 @@ kubebuilder_completion () {
 }
 
 abenn_init
+falcon_init
 kubebuilder_completion
