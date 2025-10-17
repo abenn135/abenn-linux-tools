@@ -21,7 +21,7 @@ abenn_init () {
         . ./tmux_init.sh
     fi
     if [ -f ./aks_init.sh ]; then
-        echo "yes"
+        echo "skipping aks init"
         #. ./aks_init.sh
     fi
     popd
