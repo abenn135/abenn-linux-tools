@@ -14,17 +14,6 @@ setup_aks_jumpbox() {
     
     echo "Setting up jumpbox for AKS cluster: $CLUSTER_NAME, nodepool: $NODEPOOL_NAME"
     
-    # Get nodepool subnet ID
-    echo "Fetching nodepool subnet information..."
-    SUBNET_ID=$(az aks nodepool show --cluster-name "$CLUSTER_NAME" --name "$NODEPOOL_NAME" --resource-group "$RESOURCE_GROUP" --query "vnetSubnetId" -o tsv)
-    
-    if [[ -z "$SUBNET_ID" ]]; then
-        echo "Error: Could not retrieve subnet ID for nodepool $NODEPOOL_NAME"
-        return 1
-    fi
-    
-    echo "Found subnet: $SUBNET_ID"
-    
     # Get node resource group (where VMSS is located)
     echo "Getting node resource group..."
     NODE_RESOURCE_GROUP=$(az aks show --name "$CLUSTER_NAME" --resource-group "$RESOURCE_GROUP" --query "nodeResourceGroup" -o tsv)
@@ -36,13 +25,6 @@ setup_aks_jumpbox() {
     
     echo "Found node resource group: $NODE_RESOURCE_GROUP"
     
-    # Generate SSH key pair
-    SSH_KEY_NAME="aks-jumpbox-key-$(date +%s)"
-    SSH_KEY_PATH="$HOME/.ssh/$SSH_KEY_NAME"
-    
-    echo "Generating SSH key pair..."
-    ssh-keygen -t rsa -b 2048 -f "$SSH_KEY_PATH" -N "" -q
-    
     # Get VMSS name for the nodepool (from the node resource group)
     echo "Finding VMSS for nodepool..."
     VMSS_NAME=$(az vmss list --resource-group "$NODE_RESOURCE_GROUP" --query "[?contains(name, '$NODEPOOL_NAME')].name" -o tsv | head -1)
@@ -53,6 +35,24 @@ setup_aks_jumpbox() {
     fi
     
     echo "Found VMSS: $VMSS_NAME"
+    
+    # Get subnet ID from VMSS network configuration
+    echo "Fetching subnet information from VMSS..."
+    SUBNET_ID=$(az vmss show --resource-group "$NODE_RESOURCE_GROUP" --name "$VMSS_NAME" --query "virtualMachineProfile.networkProfile.networkInterfaceConfigurations[0].ipConfigurations[0].subnet.id" -o tsv)
+    
+    if [[ -z "$SUBNET_ID" ]]; then
+        echo "Error: Could not retrieve subnet ID from VMSS $VMSS_NAME"
+        return 1
+    fi
+    
+    echo "Found subnet: $SUBNET_ID"
+    
+    # Generate SSH key pair
+    SSH_KEY_NAME="aks-jumpbox-key-$(date +%s)"
+    SSH_KEY_PATH="$HOME/.ssh/$SSH_KEY_NAME"
+    
+    echo "Generating SSH key pair..."
+    ssh-keygen -t rsa -b 2048 -f "$SSH_KEY_PATH" -N "" -q
     
     # Create jumpbox VM
     JUMPBOX_NAME="jumpbox-${CLUSTER_NAME}-${NODEPOOL_NAME}"
@@ -114,8 +114,8 @@ setup_aks_jumpbox() {
         --vmss-name "$VMSS_NAME" \
         --name VMAccessForLinux \
         --publisher Microsoft.OSTCExtensions \
-        --version 1.4 \
-        --settings "{\"username\":\"azureuser\",\"ssh_key\":\"$(cat ${SSH_KEY_PATH}.pub)\"}"
+        --version 1.5 \
+        --protected-settings "{\"username\":\"azureuser\",\"ssh_key\":\"$(cat ${SSH_KEY_PATH}.pub)\"}"
     
     # Update VMSS instances
     echo "Updating VMSS instances..."
