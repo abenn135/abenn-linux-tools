@@ -21,3 +21,6 @@ if [ -f "/opt/homebrew/bin/mise" ]; then
 fi
 
 alias k="kubectl"
+
+# Don't leave errexit on during normal shell usage, otherwise your shell will exit on any command error!!
+unsetopt errexit
