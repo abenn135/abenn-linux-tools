@@ -13,3 +13,6 @@ if [ ! $? ]; then
 fi
 
 brew install gawk
+brew tap hashicorp/tap
+brew install hashicorp/tap/vault
+brew install sk
