@@ -19,3 +19,4 @@ brew install sk
 # Might not be needed outside corp environments...
 brew tap hashicorp/tap
 brew install hashicorp/tap/vault
+brew install uv
