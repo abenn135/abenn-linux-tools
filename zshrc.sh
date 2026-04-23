@@ -31,6 +31,9 @@ if [ -f "/opt/homebrew/bin/mise" ]; then
 fi
 
 alias k="kubectl"
+alias ll="ls -lh"
+alias la="ls -a"
+alias lla="ls -lha"
 
 # Leave at the end.
 #
