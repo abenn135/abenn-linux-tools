@@ -14,8 +14,10 @@ fi
 
 source "$(dirname "${(%):-%x}")/zsh_history_widget.sh"
 
-if [ -f "$HOME/.cloud-tools/ct_setup_shell.sh" ]; then
-  . "${HOME}/.cloud-tools/ct_setup_shell.sh"
+if [ "$_ABENN_CURRENT_EMPLOYER" = "temporal" ]; then
+  if [ -d "$HOME/GolandProjects/temporal-starnix-tools/" ]; then
+    . "$HOME/GolandProjects/temporal-starnix-tools/zsh/zrc.sh"
+  fi
 fi
 
 GPG_TTY=$(tty)
