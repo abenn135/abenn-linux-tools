@@ -34,7 +34,7 @@ alias la="ls -a"
 alias lla="ls -lha"
 
 if [ -d "${HOME}/GolandProjects/trackerator/" ]; then
-  alias trk='${HOME}/GolandProjects/trackerator/trackerator'
+  alias trk='${HOME}/GolandProjects/trackerator/bin/trackerator'
 fi
 
 # Leave at the end.
