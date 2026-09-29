@@ -28,14 +28,14 @@ setopt PROMPT_SUBST
 PROMPT=$'\n%{$fg[yellow]%}%~%{$reset_color%}$(git-prompt-string)\n%{$fg[green]%}zsh %{$fg[cyan]%}%#%{$reset_color%} '
 export PROMPT
 
-if [ -f "/opt/homebrew/bin/mise" ]; then
-  eval "$(/opt/homebrew/bin/mise activate zsh)"
-fi
-
 alias k="kubectl"
 alias ll="ls -lh"
 alias la="ls -a"
 alias lla="ls -lha"
+
+if [ -d "${HOME}/GolandProjects/trackerator/" ]; then
+  alias trk='${HOME}/GolandProjects/trackerator/trackerator'
+fi
 
 # Leave at the end.
 #
